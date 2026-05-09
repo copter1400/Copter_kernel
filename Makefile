@@ -2,7 +2,7 @@ CC = gcc
 AS = as
 LD = ld
 
-CFLAGS = -m32 -ffreestanding -Wall -Wextra -Iinclude -c
+CFLAGS = -m32 -ffreestanding -fno-pic -fno-pie -Wall -Wextra -Iinclude -c
 LDFLAGS = -m elf_i386 -T linker.ld
 
 BUILD = build
@@ -51,7 +51,7 @@ iso: $(BUILD)/kernel.elf
 # RUN
 # -------------------------
 run: iso
-	qemu-system-i386 -cdrom os.iso
+	qemu-system-i386 -m 32M -cdrom os.iso
 
 # -------------------------
 # CLEAN

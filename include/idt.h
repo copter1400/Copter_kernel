@@ -3,9 +3,6 @@
 
 #include "type.h"
 
-extern void idt_load(uint32_t);
-extern void keyboard_irq();
-
 struct idt_entry {
     uint16_t base_low;
     uint16_t selector;
@@ -22,4 +19,8 @@ struct idt_ptr {
 void init_idt();
 void set_idt_gate(int n, uint32_t handler);
 
+extern void idt_load(struct idt_ptr* ptr);
+extern void keyboard_irq();
+extern void timer_irq();
+extern void isr_stub();
 #endif

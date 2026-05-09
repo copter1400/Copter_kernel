@@ -6,7 +6,7 @@
 
 typedef int (*function)();
 
-void test(const char* name, function fn) {
+void run_test(const char* name, function fn) {
     int result = fn();
 
     if (result) {

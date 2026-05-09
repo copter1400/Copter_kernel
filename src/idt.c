@@ -1,24 +1,27 @@
-#include <idt.h>
-
-extern void keyboard_irq();
+#include "idt.h"
+#include "pic.h"
+#include "timer.h"
 
 struct idt_entry idt[256];
-struct idt_ptr idtp;
 
+// set gate
 void set_idt_gate(int n, uint32_t handler) {
     idt[n].base_low = handler & 0xFFFF;
     idt[n].base_high = (handler >> 16) & 0xFFFF;
-
-    idt[n].selector = 0x08;   // kernel code segment
+    idt[n].selector = 0x10;   // ← change from 0x08 to 0x10
     idt[n].zero = 0;
-    idt[n].flags = 0x8E;      // interrupt gate
+    idt[n].flags = 0x8E;
 }
 
+// init IDT
 void init_idt() {
-    idtp.limit = sizeof(idt) - 1;
-    idtp.base = (uint32_t)&idt;
+    for (int i = 0; i < 32; i++)
+        set_idt_gate(i, (uint32_t)isr_stub);
+    set_idt_gate(32, (uint32_t)timer_irq);
+    set_idt_gate(33, (uint32_t)keyboard_irq);
 
-    set_idt_gate(9, (uint32_t)keyboard_irq);
-
-    idt_load((uint32_t)&idtp);
+    struct idt_ptr p;
+    p.limit = sizeof(idt) - 1;
+    p.base  = (uint32_t)&idt;
+    idt_load(&p);
 }

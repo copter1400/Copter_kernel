@@ -1,6 +1,9 @@
 #include "io.h"
 #include "keyboard.h"
 
+//temp
+#include "terminal.h"
+
 #define BUFFER_SIZE 128
 
 static char buffer[BUFFER_SIZE];
@@ -69,12 +72,15 @@ char keyboard_pop() {
 // IRQ handle
 void keyboard_handler() {
     unsigned char sc = inb(0x60);
-
     char c = scancode_to_ascii(sc);
-
     if (c)
         keyboard_push(c);
-
-    // End of interrupt (PIC)
     outb(0x20, 0x20);
 }
+
+// TEST
+// void keyboard_handler() {
+//     unsigned char sc = inb(0x60);  // MUST read scancode even in debug
+//     print("K");
+//     outb(0x20, 0x20);
+// }

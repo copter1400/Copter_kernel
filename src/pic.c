@@ -1,6 +1,19 @@
 #include "io.h"
 
 void pic_init() {
-    outb(0x21, 0xFD); // enable IRQ1 only
-    outb(0xA1, 0xFF); // disable slave PIC
+    outb(0x20, 0x11);
+    outb(0xA0, 0x11);
+
+    outb(0x21, 0x20); // IRQ0–7 → 32–39
+    outb(0xA1, 0x28); // IRQ8–15 → 40–47
+
+    outb(0x21, 0x04);
+    outb(0xA1, 0x02);
+
+    outb(0x21, 0x01);
+    outb(0xA1, 0x01);
+
+    // enable timer + keyboard
+    outb(0x21, 0xFC); // 11111100 → IRQ0 + IRQ1 ON
+    outb(0xA1, 0xFF);
 }
