@@ -18,7 +18,7 @@ void init_idt() {
     idtp.limit = sizeof(idt) - 1;
     idtp.base = (uint32_t)&idt;
 
-    set_idt_gate(33, (uint32_t)keyboard_irq);
+    set_idt_gate(9, (uint32_t)keyboard_irq);
 
     idt_load((uint32_t)&idtp);
 }

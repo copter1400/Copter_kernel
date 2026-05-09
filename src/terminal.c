@@ -1,79 +1,121 @@
+#include "config.h"
 #include "terminal.h"
+#include "type.h"
 
-void clear_screen() {
-    char* vga = (char*)0xB8000;
+terminal_t terminal;
 
-    // 80 columns 25 rows
-    // 1 char 1 color per char
-    // aka [char 1][color 1] [char 2][color 2]
-
-    // set all to ' ' with light-grey text black background
-    for (int i=0;i< 80 * 25 * 2;i+=2) {
-        vga[i] = ' ';
-        vga[i+1] = 0x07;
-    }
+// init terminal state
+void terminal_init() {
+    terminal.row = 0;
+    terminal.col = 0;
 }
 
+// VGA test
+int vga_test() {
+    uint16_t* vga = (uint16_t*)0xB8000;
+
+    int size = kernel_config.vga_width * kernel_config.vga_height;
+
+    // write pattern
+    for (int i = 0; i < size; i++) {
+        uint8_t ch = (i & 0xFF);              // pattern char
+        uint8_t color = (i * 3) & 0x0F;       // pattern color (0-15)
+
+        vga[i] = (color << 8) | ch;
+    }
+
+    // read back and verify
+    for (int i = 0; i < size; i++) {
+        uint8_t expected_ch = (i & 0xFF);
+        uint8_t expected_color = (i * 3) & 0x0F;
+
+        uint16_t val = vga[i];
+
+        uint8_t ch = val & 0xFF;
+        uint8_t color = (val >> 8) & 0x0F;
+
+        if (ch != expected_ch || color != expected_color) {
+            return 0; // FAIL
+        }
+    }
+
+    clear_screen();
+
+    return 1; // OK
+}
+
+// clear entire screen
+void clear_screen() {
+    uint16_t* vga = (uint16_t*)0xB8000;
+
+    int size = kernel_config.vga_width * kernel_config.vga_height;
+
+    for (int i = 0; i < size; i++) {
+        vga[i] = (0x07 << 8) | ' ';
+    }
+
+    // reset cursor here (IMPORTANT FIX)
+    terminal.row = 0;
+    terminal.col = 0;
+}
+
+// scroll screen up by 1 row
 void scroll() {
-    char* vga = (char*)0xB8000;
+    uint16_t* vga = (uint16_t*)0xB8000;
 
-    for (int row = 1; row < 25; row++) {
-        for (int col = 0; col < 80; col++) {
+    int w = kernel_config.vga_width;
+    int h = kernel_config.vga_height;
 
-            int src = (row * 80 + col) * 2;
-            int dst = ((row - 1) * 80 + col) * 2;
+    // move rows up
+    for (int row = 1; row < h; row++) {
+        for (int col = 0; col < w; col++) {
+
+            int src = row * w + col;
+            int dst = (row - 1) * w + col;
 
             vga[dst] = vga[src];
-            vga[dst + 1] = vga[src + 1];
         }
     }
 
     // clear last row
-    for (int col = 0; col < 80; col++) {
-        int i = (24 * 80 + col) * 2;
-        vga[i] = ' ';
-        vga[i + 1] = 0x07;
+    for (int col = 0; col < w; col++) {
+        int i = (h - 1) * w + col;
+        vga[i] = (0x07 << 8) | ' ';
     }
 }
 
+// print text to screen
 void print(const char* text) {
-    static int row = 0;
-    static int col = 0;
 
-    char* vga = (char*)0xB8000;
+    uint16_t* vga = (uint16_t*)0xB8000;
 
-    int s = 0;
+    int i = 0;
 
-    while (text[s] != 0) {
+    while (text[i]) {
 
-        char c = text[s];
+        char c = text[i];
 
-        // Newline
         if (c == '\n') {
-            row++;
-            col = 0;
+            terminal.row++;
+            terminal.col = 0;
         }
         else {
-            int v = (row * 80 + col) * 2;
+            int pos = terminal.row * kernel_config.vga_width + terminal.col;
+            vga[pos] = (0x07 << 8) | c;
 
-            vga[v] = c;
-            vga[v + 1] = 0x07;
-
-            col++;
+            terminal.col++;
         }
 
-        // if col hit max will reset column and go to next row
-        if (col >= 80) {
-            col = 0;
-            row++;
+        if (terminal.col >= kernel_config.vga_width) {
+            terminal.col = 0;
+            terminal.row++;
         }
 
-        // if row hit max
-        if (row >= 25) {
+        if (terminal.row >= kernel_config.vga_height) {
             scroll();
-            row = 24;
+            terminal.row = kernel_config.vga_height - 1;
         }
 
-        s++;
+        i++;
     }
 }
