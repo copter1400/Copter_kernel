@@ -6,12 +6,9 @@
 #include "pic.h"
 #include "test.h"
 #include "idt.h"
+#include "shell.h"
 
 void kernel_main() {
-    volatile uint16_t* vga = (volatile uint16_t*)0xB8000;
-    vga[0] = (0x07 << 8) | 'H';
-    vga[1] = (0x07 << 8) | 'i';
-
     config_load();
     terminal_init();
 
@@ -27,19 +24,13 @@ void kernel_main() {
     const char* msg[3] = {
         "Copter kernel\n",
         "If you can read this, That means this kernel can boot!\n",
-        "Test keyboard input here :"
+        "You can now use shell under here\n",
+        "type 'help' for available command!"
     };
 
     for (int i = 0; i < 3; i++) {
-        print(msg[i]);
+        print_color(msg[i], 0x0F);
     }
 
-    while (1) {
-        char c = keyboard_pop();
-
-        if (c) {
-            char str[2] = {c, 0};
-            print(str);
-        }
-    }
+    shell_task();
 }

@@ -42,6 +42,7 @@ static char scancode_to_ascii(unsigned char sc) {
 
         case 0x39: return ' ';   // space
         case 0x1C: return '\n';  // enter
+        case 0x0E: return '\b';  // backspace
 
         default: return 0;
     }

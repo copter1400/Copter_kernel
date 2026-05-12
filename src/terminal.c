@@ -1,6 +1,7 @@
 #include "config.h"
 #include "terminal.h"
 #include "type.h"
+#include "io.h"
 
 terminal_t terminal;
 
@@ -44,6 +45,20 @@ int vga_test() {
     return 1; // OK
 }
 
+// move cursor
+void move_cursor() {
+
+    uint16_t pos =
+        terminal.row * kernel_config.vga_width
+        + terminal.col;
+
+    outb(0x3D4, 0x0F);
+    outb(0x3D5, (uint8_t)(pos & 0xFF));
+
+    outb(0x3D4, 0x0E);
+    outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+}
+
 // clear entire screen
 void clear_screen() {
     uint16_t* vga = (uint16_t*)0xB8000;
@@ -57,6 +72,7 @@ void clear_screen() {
     // reset cursor here (IMPORTANT FIX)
     terminal.row = 0;
     terminal.col = 0;
+    move_cursor(0,0);
 }
 
 // scroll screen up by 1 row
@@ -86,7 +102,6 @@ void scroll() {
 
 // print text to screen
 void print(const char* text) {
-
     uint16_t* vga = (uint16_t*)0xB8000;
 
     int i = 0;
@@ -100,7 +115,11 @@ void print(const char* text) {
             terminal.col = 0;
         }
         else {
-            int pos = terminal.row * kernel_config.vga_width + terminal.col;
+
+            int pos =
+                terminal.row * kernel_config.vga_width
+                + terminal.col;
+
             vga[pos] = (0x07 << 8) | c;
 
             terminal.col++;
@@ -117,5 +136,67 @@ void print(const char* text) {
         }
 
         i++;
+    }
+
+    move_cursor();
+}
+
+// print text to screen and color
+void print_color(const char* text, uint8_t color) {
+    uint16_t* vga = (uint16_t*)0xB8000;
+
+    int i = 0;
+
+    while (text[i]) {
+
+        char c = text[i];
+
+        if (c == '\n') {
+            terminal.row++;
+            terminal.col = 0;
+        }
+        else {
+
+            int pos =
+                terminal.row * kernel_config.vga_width
+                + terminal.col;
+
+            vga[pos] = (color << 8) | c;
+
+            terminal.col++;
+        }
+
+        if (terminal.col >= kernel_config.vga_width) {
+            terminal.col = 0;
+            terminal.row++;
+        }
+
+        if (terminal.row >= kernel_config.vga_height) {
+            scroll();
+            terminal.row = kernel_config.vga_height - 1;
+        }
+
+        i++;
+    }
+
+    move_cursor();
+}
+
+// backspace by 1
+void terminal_backspace() {
+
+    if (terminal.col > 0) {
+
+        terminal.col--;
+
+        int pos =
+            terminal.row * kernel_config.vga_width
+            + terminal.col;
+
+        uint16_t* vga = (uint16_t*)0xB8000;
+
+        vga[pos] = (0x07 << 8) | ' ';
+
+        move_cursor();
     }
 }
