@@ -141,6 +141,48 @@ void print(const char* text) {
     move_cursor();
 }
 
+// print integer
+void print_int(uint32_t value) {
+
+    if (value == 0) {
+        print("0");
+        return;
+    }
+
+    char buffer[16];
+    int i = 0;
+
+    while (value > 0) {
+        buffer[i++] = '0' + (value % 10);
+        value /= 10;
+    }
+
+    while (i--) {
+        char c[2] = { buffer[i], 0 };
+        print(c);
+    }
+}
+
+// print HEX
+void print_hex(uint32_t value) {
+
+    char hex[] = "0123456789ABCDEF";
+    char buffer[11];
+
+    buffer[0] = '0';
+    buffer[1] = 'x';
+
+    for (int i = 0; i < 8; i++) {
+
+        uint32_t shift = (7 - i) * 4;
+        buffer[i + 2] = hex[(value >> shift) & 0xF];
+    }
+
+    buffer[10] = 0;
+
+    print(buffer);
+}
+
 // print text to screen and color
 void print_color(const char* text, uint8_t color) {
     uint16_t* vga = (uint16_t*)0xB8000;

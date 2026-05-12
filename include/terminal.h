@@ -15,6 +15,8 @@ void terminal_init();
 int vga_test();
 void print(const char* text);
 void print_color(const char* text, uint8_t color);
+void print_int(uint32_t value);
+void print_hex(uint32_t value);
 void scroll();
 void clear_screen();
 void terminal_backspace();

@@ -7,10 +7,27 @@
 #include "test.h"
 #include "idt.h"
 #include "shell.h"
+#include "multiboot.h"
 
-void kernel_main() {
+multiboot_info_t* g_mb;
+void kernel_get_memory_info() {
+    print_memory_map(g_mb);
+    dump_memory_map(g_mb);
+}
+
+void kernel_get_memory_region(uint32_t base, uint32_t len) {
+    dump_region(base, len);
+}
+
+void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
     config_load();
+
     terminal_init();
+    run_test("VGA test", vga_test);
+
+    multiboot_info_t* mb = (multiboot_info_t*)mb_addr;
+    print_memory_map(mb);
+    g_mb = (multiboot_info_t*)mb_addr;
 
     asm volatile("cli");
 
@@ -19,9 +36,7 @@ void kernel_main() {
 
     asm volatile("sti");
 
-    run_test("VGA test", vga_test);
-
-    const char* msg[3] = {
+    const char* msg[4] = {
         "Copter kernel\n",
         "If you can read this, That means this kernel can boot!\n",
         "You can now use shell under here\n",

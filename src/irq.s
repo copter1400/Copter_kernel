@@ -18,3 +18,10 @@ timer_irq:
     call timer_handler
     popa
     iretd
+
+.global divide_by_zero_irq
+divide_by_zero_irq:
+    pusha
+    call divide_by_zero_handler
+    popa
+    iretd

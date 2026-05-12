@@ -22,5 +22,6 @@ void set_idt_gate(int n, uint32_t handler);
 extern void idt_load(struct idt_ptr* ptr);
 extern void keyboard_irq();
 extern void timer_irq();
+extern void divide_by_zero_irq();
 extern void isr_stub();
 #endif

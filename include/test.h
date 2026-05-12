@@ -4,5 +4,6 @@
 typedef int (*function)();
 
 void run_test(const char* name, function fn);
+void warn(const char* name, int is_ok);
 
 #endif

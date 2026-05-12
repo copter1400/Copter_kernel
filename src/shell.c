@@ -2,6 +2,8 @@
 #include "type.h"
 #include "terminal.h"
 #include "string.h"
+#include "timer.h"
+#include "panic.h"
 
 void shell_task() {
     char buffer[256];
@@ -22,7 +24,6 @@ void shell_task() {
 
             print("\n");
             shell_exec(buffer);
-            print("\n");
             print(">");
 
             pos = 0;
@@ -54,15 +55,36 @@ void shell_exec(char* buffer) {
         i++;
     }
 
-    if (strcmp(buffer, "help") == 0) {
-        print("Commands: help clear echo");
+    if (strcmp(buffer, "") == 0) {
+        
+    }
+
+    // test command
+    else if (strcmp(buffer, "dvz") == 0) {
+        asm volatile("int $0");
+    }
+
+    // real command
+    else if   (strcmp(buffer, "help") == 0) {
+        print("Commands: help hello tick clear echo dump-ram dvz panic\n");
+    } else if (strcmp(buffer, "hello") == 0) {
+        print("Hello, World!\n");
+    } else if (strcmp(buffer, "tick") == 0) {
+        print_int(timer_ticks);
+        print("\n");
     } else if (strcmp(buffer, "clear") == 0) {
         clear_screen();
     } else if (strcmp(buffer, "echo") == 0) {
         print(arg);
+        print("\n");
+    } else if (strcmp(buffer, "dump-ram") == 0) {
+        kernel_get_memory_info();
+        kernel_get_memory_region(0x100000 + atoi(arg), 10);
+    } else if (strcmp(buffer, "panic") == 0) {
+        panic(arg);
     }
 
     else {
-        print("Unknown command");
+        print("Unknown command\n");
     }
 }
