@@ -1,9 +1,11 @@
+#include "kshell.h"
 #include "keyboard.h"
 #include "type.h"
 #include "terminal.h"
 #include "string.h"
 #include "timer.h"
 #include "panic.h"
+#include "multiboot.h"
 
 void shell_task() {
     char buffer[256];
