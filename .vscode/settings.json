@@ -1,0 +1,37 @@
+{
+    "ROS2.distro": "humble",
+    "python.autoComplete.extraPaths": [
+        "/home/copter/turtlebot3_ws/build/turtlebot3_teleop",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_teleop/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_example",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_example/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_msgs/local/lib/python3.10/dist-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_autorace_mission",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_autorace_mission/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_autorace_detect",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_autorace_detect/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_autorace_camera",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_autorace_camera/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/install/dynamixel_sdk_custom_interfaces/local/lib/python3.10/dist-packages",
+        "/home/copter/turtlebot3_ws/install/dynamixel_sdk/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/copter/turtlebot3_ws/build/turtlebot3_teleop",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_teleop/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_example",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_example/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_msgs/local/lib/python3.10/dist-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_autorace_mission",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_autorace_mission/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_autorace_detect",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_autorace_detect/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/build/turtlebot3_autorace_camera",
+        "/home/copter/turtlebot3_ws/install/turtlebot3_autorace_camera/lib/python3.10/site-packages",
+        "/home/copter/turtlebot3_ws/install/dynamixel_sdk_custom_interfaces/local/lib/python3.10/dist-packages",
+        "/home/copter/turtlebot3_ws/install/dynamixel_sdk/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

@@ -48,21 +48,5 @@ void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
         print_color(msg[i], 0x0F);
     }
 
-    char* test = kmalloc(64);
-
-    test[0] = 'H';
-    test[1] = 'e';
-    test[2] = 'a';
-    test[3] = 'p';
-    test[4] = ' ';
-    test[5] = 't';
-    test[6] = 'e';
-    test[7] = 's';
-    test[8] = 't';
-    test[9] = '\n';
-    test[10] = 0;
-
-    print(test);
-
     shell_task();
 }
