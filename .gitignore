@@ -3,3 +3,4 @@ os.iso
 *.swp
 *.swo
 *.swx
+.vscode/
