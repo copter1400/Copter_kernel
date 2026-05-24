@@ -50,11 +50,5 @@ void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
         print_color(msg[i], 0x0F);
     }
 
-    for (uint32_t j=0;j<4294967295;j++) {
-        for (uint32_t i=0;i<4294967295;i++) {
-            kmalloc(4294967295);
-        }
-    }
-
     shell_task();
 }
