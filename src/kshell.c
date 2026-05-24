@@ -17,11 +17,22 @@ void shell_task() {
     uint8_t pos = 0;
 
     print(">");
+
     while (1) {
 
         char c = keyboard_pop();
 
-        if (!c){
+        if (!c)
+            continue;
+
+        // arrows
+        if (c == KEY_LEFT) {
+            print("[LEFT]");
+            continue;
+        }
+
+        if (c == KEY_RIGHT) {
+            print("[RIGHT]");
             continue;
         }
 
@@ -34,13 +45,21 @@ void shell_task() {
             print(">");
 
             pos = 0;
-        } else if (c == '\b' && pos > 0) {
+            continue;
+        }
+
+        if (c == '\b' && pos > 0) {
             terminal_backspace();
             pos--;
-        } else if (pos < kernel_config.kshell_buffer - 1) {
+            continue;
+        }
+
+        if (pos < kernel_config.kshell_buffer - 1) {
             buffer[pos] = c;
-            char str[2] = {c,0};
+
+            char str[2] = {c, 0};
             print(str);
+
             pos++;
         }
     }
@@ -106,7 +125,7 @@ void shell_exec(char* buffer) {
         print("\n");
     } else if (strcmp(argv[0], "dump-ram") == 0) {
         kernel_get_memory_info();
-        kernel_get_memory_region(0x100000 + atoi(argv[0]), 10);
+        kernel_get_memory_region(0x100000 + atoi(argv[1]), 10);
     } else if (strcmp(argv[0], "panic") == 0) {
         panic(argv[1]);
     }
@@ -118,7 +137,6 @@ void shell_exec(char* buffer) {
         print("\n");
     }
 
-    // clear argv argc
-    argv[0] = NULL;
-    argc    = 0;
+    // free argv
+    kfree(argv);
 }
