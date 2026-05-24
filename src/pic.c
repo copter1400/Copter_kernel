@@ -1,3 +1,5 @@
+#include "io.h"
+
 void pic_init() {
 
     // start init

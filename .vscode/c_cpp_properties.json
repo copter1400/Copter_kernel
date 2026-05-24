@@ -1,22 +1,14 @@
 {
   "configurations": [
     {
-      "browse": {
-        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
-        "limitSymbolsToIncludedHeaders": false
-      },
+      "name": "kernel",
       "includePath": [
-        "/home/copter/turtlebot3_ws/install/turtlebot3_msgs/include/**",
-        "/home/copter/turtlebot3_ws/install/dynamixel_sdk_custom_interfaces/include/**",
-        "/home/copter/turtlebot3_ws/install/dynamixel_sdk/include/**",
-        "/opt/ros/humble/include/**",
-        "/usr/include/**"
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/src"
       ],
-      "name": "ros2",
-      "intelliSenseMode": "gcc-x64",
       "compilerPath": "/usr/bin/gcc",
-      "cStandard": "gnu11",
-      "cppStandard": "c++17"
+      "cStandard": "c11",
+      "intelliSenseMode": "linux-gcc-x64"
     }
   ],
   "version": 4
