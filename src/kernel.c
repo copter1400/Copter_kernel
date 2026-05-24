@@ -22,6 +22,7 @@ void kernel_get_memory_region(uint32_t base, uint32_t len) {
 
 void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
     config_load();
+    heap_init();
 
     terminal_init();
     run_test("VGA test", vga_test);
@@ -34,6 +35,7 @@ void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
 
     pic_init();
     init_idt();
+    keyboard_init();
 
     asm volatile("sti");
 

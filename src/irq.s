@@ -2,13 +2,19 @@
 
 .global isr_stub
 isr_stub:
-    cli
-    hlt         # just freeze so you can see where it died
+    pusha
+    call panic_handler
+    popa
+    iretd
 
 .global keyboard_irq
 keyboard_irq:
     pusha
     call keyboard_handler
+
+    mov al, 0x20
+    out 0x20, al
+
     popa
     iretd
 
@@ -16,6 +22,10 @@ keyboard_irq:
 timer_irq:
     pusha
     call timer_handler
+
+    mov al, 0x20
+    out 0x20, al
+
     popa
     iretd
 
