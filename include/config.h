@@ -11,6 +11,9 @@ typedef struct {
     uint8_t  vga_color_warning;
     uint8_t  vga_color_ok;
     uint16_t kshell_buffer;
+    uint16_t password;
+    bool     debug;
+
 } kernel_config_t;
 
 extern kernel_config_t kernel_config;

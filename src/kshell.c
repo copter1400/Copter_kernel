@@ -9,11 +9,14 @@
 #include "heap.h"
 #include "kernel.h"
 #include "config.h"
+#include "test.h"
+#include "task.h"
 
-void shell_task() {
+void kshell_task(int pid) {
     config_load();
 
-    char* buffer = kmalloc(kernel_config.kshell_buffer);
+    // char* buffer = kmalloc(kernel_config.kshell_buffer);
+    char* buffer = kmalloc(256);
     uint8_t pos = 0;
 
     print(">");
@@ -41,7 +44,7 @@ void shell_task() {
             buffer[pos] = 0;
 
             print("\n");
-            shell_exec(buffer);
+            kshell_exec(buffer, pid);
             print(">");
 
             pos = 0;
@@ -65,10 +68,13 @@ void shell_task() {
     }
 }
 
-void shell_exec(char* buffer) {
+void kshell_exec(char* buffer, int pid) {
     int argc = 0;
     int i = 0;
     int in_word = 0;
+
+    // check heap
+    heap_check();
 
     // argc part
     while (buffer[i] != '\0') {
@@ -85,21 +91,19 @@ void shell_exec(char* buffer) {
         i++;
     }
 
-    // argv part
     char **argv = kmalloc(sizeof(char*) * (argc + 1));
     int a = 0;
-    for (int i = 0; i < kernel_config.kshell_buffer; i++) {
-
+    for (int i = 0; i < kernel_config.kshell_buffer && a < argc; i++) {
         if (buffer[i] != '\0' &&
             (i == 0 || buffer[i - 1] == '\0')) {
-
             argv[a++] = &buffer[i];
         }
     }
+    
     argv[a] = 0;
 
-    if (strcmp(argv[0], "") == 0 || argc == 0) {
-        
+    if (argc == 0 || argv[0] == 0) {
+        return;
     }
 
     // test command
@@ -109,7 +113,7 @@ void shell_exec(char* buffer) {
 
     // real command
     else if   (strcmp(argv[0], "help") == 0) {
-        print("Commands: help hello tick clear echo dump-ram dvz panic\n");
+        print("Commands: help hello tick clear echo dump-ram dvz vga-test set panic tls tkill\n");
     } else if (strcmp(argv[0], "hello") == 0) {
         print("Hello, World!\n");
     } else if (strcmp(argv[0], "tick") == 0) {
@@ -117,6 +121,16 @@ void shell_exec(char* buffer) {
         print("\n");
     } else if (strcmp(argv[0], "clear") == 0) {
         clear_screen();
+    } else if (strcmp(argv[0], "set") == 0) {
+        // SET FUNCTION
+        if (strcmp(argv[1], "debug") == 0) {
+            kernel_config.debug = 1;
+            print("\ndebug has been set to ");
+            print_int(kernel_config.debug);
+            print("\n");
+            warn("Aware that debug flag can corrupt your memory!\n",2);
+        }
+        // SET FUNCTION
     } else if (strcmp(argv[0], "echo") == 0) {
         for (int i = 1; i < argc; i++) {
             print(argv[i]);
@@ -126,8 +140,14 @@ void shell_exec(char* buffer) {
     } else if (strcmp(argv[0], "dump-ram") == 0) {
         kernel_get_memory_info();
         kernel_get_memory_region(0x100000 + atoi(argv[1]), 10);
+    } else if (strcmp(argv[0], "vga-test") == 0) {
+        run_test("VGA test", vga_test);
     } else if (strcmp(argv[0], "panic") == 0) {
         panic(argv[1]);
+    } else if (strcmp(argv[0], "tls") == 0) {
+        tls();
+    } else if (strcmp(argv[0], "tkill") == 0) {
+        kill_task(atoi(argv[1]));
     }
 
     else {
@@ -139,4 +159,7 @@ void shell_exec(char* buffer) {
 
     // free argv
     kfree(argv);
+
+    // check heap
+    heap_check();
 }

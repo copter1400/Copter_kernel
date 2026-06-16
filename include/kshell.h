@@ -1,7 +1,7 @@
 #ifndef KSHELL_H
 #define KSHELL_H
 
-void shell_task();
-void shell_exec(char* buffer);
+void kshell_task();
+void kshell_exec(char* buffer, int pid);
 
 #endif

@@ -6,5 +6,6 @@
 void heap_init();
 void* kmalloc(uint32_t size);
 void kfree(void* ptr);
+void heap_check();
 
 #endif

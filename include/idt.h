@@ -19,6 +19,9 @@ struct idt_ptr {
 void init_idt();
 void set_idt_gate(int n, uint32_t handler);
 
+extern void isr_stub_0();
+extern void isr_stub_13();
+extern void isr_stub_14();
 extern void idt_load(struct idt_ptr* ptr);
 extern void keyboard_irq();
 extern void timer_irq();

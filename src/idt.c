@@ -19,6 +19,9 @@ void init_idt() {
         set_idt_gate(i, (uint32_t)isr_stub);
     set_idt_gate(32, (uint32_t)timer_irq);
     set_idt_gate(33, (uint32_t)keyboard_irq);
+    set_idt_gate(0,  (uint32_t)isr_stub_0);
+    set_idt_gate(13, (uint32_t)isr_stub_13);
+    set_idt_gate(14, (uint32_t)isr_stub_14);
     set_idt_gate(0, (uint32_t)divide_by_zero_irq);
 
     struct idt_ptr p;

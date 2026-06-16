@@ -113,8 +113,9 @@ void print(const char* text) {
         if (c == '\n') {
             terminal.row++;
             terminal.col = 0;
-        }
-        else {
+        } else if (c == '\r') {
+            terminal.col = 0;
+        } else {
 
             int pos =
                 terminal.row * kernel_config.vga_width

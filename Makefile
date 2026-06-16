@@ -51,7 +51,7 @@ iso: $(BUILD)/kernel.elf
 # RUN
 # -------------------------
 run: iso
-	qemu-system-i386 -m 32M -cdrom os.iso
+	qemu-system-i386 -serial stdio -m 128M -cdrom os.iso
 
 # -------------------------
 # CLEAN
