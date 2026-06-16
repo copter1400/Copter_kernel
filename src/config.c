@@ -11,5 +11,5 @@ void config_load() {
     kernel_config.vga_color_ok      = 0x02;
     kernel_config.kshell_buffer     = 256;
     kernel_config.password          = 1234;
-    kernel_config.danger            = 0;
+    kernel_config.debug             = 0;
 }
