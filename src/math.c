@@ -76,6 +76,7 @@ int32_t clamp(int32_t A, int32_t ceil, int32_t floor) {
     } else if (A < floor) {
         return floor;
     }
+    return 0;
 }
 uint32_t uclamp(uint32_t A, uint32_t ceil, uint32_t floor) {
     if (A >= floor && A <= ceil) {
@@ -85,6 +86,7 @@ uint32_t uclamp(uint32_t A, uint32_t ceil, uint32_t floor) {
     } else if (A < floor) {
         return floor;
     }
+    return 0;
 }
 int64_t clamp64(int64_t A, int64_t ceil, int64_t floor) {
     if (A >= floor && A <= ceil) {
@@ -94,6 +96,7 @@ int64_t clamp64(int64_t A, int64_t ceil, int64_t floor) {
     } else if (A < floor) {
         return floor;
     }
+    return 0;
 }
 uint64_t uclamp64(uint64_t A, uint64_t ceil, uint64_t floor) {
     if (A >= floor && A <= ceil) {
@@ -103,6 +106,7 @@ uint64_t uclamp64(uint64_t A, uint64_t ceil, uint64_t floor) {
     } else if (A < floor) {
         return floor;
     }
+    return 0;
 }
 
 // Sign
@@ -114,6 +118,7 @@ int sign(int32_t A) {
     } else if (A == 0) {
         return 0;
     }
+    return 0;
 }
 int sign64(int64_t A) {
     if (A > 0) {
@@ -123,6 +128,7 @@ int sign64(int64_t A) {
     } else if (A == 0) {
         return 0;
     }
+    return 2;
 }
 
 // isqure

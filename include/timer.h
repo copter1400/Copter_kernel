@@ -7,5 +7,7 @@ extern volatile uint32_t timer_ticks;
 
 void pit_init(uint32_t hz);
 void timer_handler();
+uint32_t get_tick();
+uint32_t get_hz();
 
 #endif

@@ -13,6 +13,7 @@
 #include "panic.h"
 #include "serial.h"
 #include "timer.h"
+#include "time.h"
 
 multiboot_info_t* g_mb;
 void kernel_get_memory_info() {
@@ -25,11 +26,35 @@ void kernel_get_memory_region(uint32_t base, uint32_t len) {
 }
 
 void A(uint32_t pid) {
-    serial_print("A: my pid is ");
-    serial_print_int(pid);
-    serial_print("\n");
-    while(1) {}
+    while (true) {
+        print("time (H:M:S | D:M:Y (Timezone) : ");
+        print_int(get_time(2));
+        print(":");
+        print_int(get_time(1));
+        print(":");
+        print_int(get_time(0));
+        print(" | ");
+        print_int(get_time(3));
+        print(":");
+        print_int(get_time(4));
+        print(":");
+        print_int(get_time(5));
+        print(" (");
+        print_int(get_time(6));
+        print(")\n");
+        sleep(1);
+    }  
 }
+
+void B(uint32_t pid) {
+    while (true) {
+        print("B : this work WOW; current tick : ");
+        print_int(get_tick());
+        print("\n");
+        sleep(2);
+    }  
+}
+
 
 void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
     config_load();
@@ -49,7 +74,7 @@ void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
     pic_init();
     init_idt();
     keyboard_init();
-    pit_init(100);
+    pit_init(kernel_config.timer_hz);
 
     asm volatile("sti");
 
@@ -70,7 +95,8 @@ void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
     serial_print_hex(cs);
     serial_print("\n");
 
-    create_task((uint32_t)A, "A task_A");
+    //create_task((uint32_t)A, "A task_A");
+    //create_task((uint32_t)B, "B task_B");
     create_task((uint32_t)kshell_task, "kshell");
 
     while(1) { asm volatile("hlt"); }

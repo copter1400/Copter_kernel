@@ -13,6 +13,7 @@ typedef struct {
     uint16_t kshell_buffer;
     uint16_t password;
     bool     debug;
+    uint16_t timer_hz;
 
 } kernel_config_t;
 

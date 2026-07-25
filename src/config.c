@@ -12,4 +12,5 @@ void config_load() {
     kernel_config.kshell_buffer     = 256;
     kernel_config.password          = 1234;
     kernel_config.debug             = 0;
+    kernel_config.timer_hz          = 1000;
 }

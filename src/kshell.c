@@ -11,6 +11,7 @@
 #include "config.h"
 #include "test.h"
 #include "task.h"
+#include "time.h"
 
 void kshell_task(int pid) {
     config_load();
@@ -148,6 +149,22 @@ void kshell_exec(char* buffer, int pid) {
         tls();
     } else if (strcmp(argv[0], "tkill") == 0) {
         kill_task(atoi(argv[1]));
+    } else if (strcmp(argv[0], "time") == 0) {
+        print("time (H:M:S | D:M:Y (Timezone) : ");
+        print_int(get_time(2));
+        print(":");
+        print_int(get_time(1));
+        print(":");
+        print_int(get_time(0));
+        print(" | ");
+        print_int(get_time(3));
+        print(":");
+        print_int(get_time(4));
+        print(":");
+        print_int(get_time(5));
+        print(" (");
+        print_int(get_time(6));
+        print(")\n");
     }
 
     else {
