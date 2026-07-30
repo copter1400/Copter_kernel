@@ -25,6 +25,7 @@ void kernel_get_memory_region(uint32_t base, uint32_t len) {
     dump_region(base, len);
 }
 
+// Test function
 void A(uint32_t pid) {
     while (true) {
         print("time (H:M:S | D:M:Y (Timezone) : ");
@@ -78,14 +79,12 @@ void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
 
     asm volatile("sti");
 
-    const char* msg[4] = {
-        "Copter kernel\n",
-        "If you can read this, That means this kernel can boot!\n",
-        "You can now use shell under here\n",
-        "type 'help' for available command!"
+    const char* msg[2] = {
+        "Ckernel\n",
+        "type 'help' for available command\n"
     };
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
         print_color(msg[i], 0x0F);
     }
 
