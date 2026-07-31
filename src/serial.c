@@ -48,3 +48,32 @@ void serial_print_hex(uint32_t value) {
     buffer[10] = 0;
     serial_print(buffer);
 }
+
+static void serial_print_hex_generic(uint32_t value, int digits) {
+    char hex[] = "0123456789ABCDEF";
+    char buffer[11];
+
+    buffer[0] = '0';
+    buffer[1] = 'x';
+
+    for (int i = 0; i < digits; i++) {
+        int shift = (digits - 1 - i) * 4;
+        buffer[i + 2] = hex[(value >> shift) & 0xF];
+    }
+
+    buffer[digits + 2] = '\0';
+
+    serial_print(buffer);
+}
+
+void serial_print_hex8(uint8_t value) {
+    serial_print_hex_generic(value, 2);
+}
+
+void serial_print_hex16(uint16_t value) {
+    serial_print_hex_generic(value, 4);
+}
+
+void serial_print_hex32(uint32_t value) {
+    serial_print_hex_generic(value, 8);
+}

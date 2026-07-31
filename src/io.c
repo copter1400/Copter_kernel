@@ -42,7 +42,7 @@ void outw(uint16_t port, uint16_t val) {
 }
 
 void insw(uint16_t port, void *buffer, uint32_t count) {
-    uint16_t *buf = (uint16_t *)buffer;
+    uint16_t *buf = (uint16_t*)buffer;
 
     for (uint32_t i=0;i<count;i++) {
         *buf = inw(port);

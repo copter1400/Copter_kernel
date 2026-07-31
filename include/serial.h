@@ -8,5 +8,8 @@ void serial_putc(char c);
 void serial_print(const char* s);
 void serial_print_int(uint32_t value);
 void serial_print_hex(uint32_t value);
+void serial_print_hex8(uint8_t value);
+void serial_print_hex16(uint16_t value);
+void serial_print_hex32(uint32_t value);
 
 #endif

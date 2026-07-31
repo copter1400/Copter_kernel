@@ -14,6 +14,7 @@
 #include "serial.h"
 #include "timer.h"
 #include "time.h"
+#include "disk.h"
 
 multiboot_info_t* g_mb;
 void kernel_get_memory_info() {
@@ -78,6 +79,24 @@ void kernel_main(uint32_t mb_magic, uint32_t mb_addr) {
     pit_init(kernel_config.timer_hz);
 
     asm volatile("sti");
+
+    uint16_t identify[256];
+    int result;
+    ata_identify(identify, result);
+
+    if (result == 0) {
+        for (size_t i=0;i<256;i++) {
+            serial_print_hex16(identify[i]);
+            serial_print(" ");
+        }
+    } else if (result == 1) {
+        warn("No ATA device present", 0);
+    } else if (result == 2) {
+        warn("disk command", 0);
+    }
+    
+    print("\n");
+    
 
     const char* msg[2] = {
         "Ckernel\n",
